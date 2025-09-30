@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</title>
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#ffffff; --ink:#111827; --muted:#6b7280; --accent:#17c3b2; --warn:#f59e0b;
+      --border:#e5e7eb; --table:#ffffff; --safe:#18a999;
+    }
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Arial,sans-serif;line-height:1.6}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+    header .dot{width:12px;height:12px;border-radius:50%;background:var(--accent)}
+    header h1{font-size:20px;margin:0}
+    .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:50}
+    .gate-card{width:min(680px,92vw);background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .gate-card h2{margin:0 0 8px 0;font-size:22px}
+    .gate-card p{color:var(--muted);margin:0 0 18px 0}
+    .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{appearance:none;border:1px solid var(--border);background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn.primary{background:var(--accent);border-color:transparent;color:#062925;font-weight:700}
+    .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
+
+    .table-wrap{background:var(--table);border:1px solid var(--border);border-radius:16px;overflow:auto}
+    table{border-collapse:separate;border-spacing:0;width:100%;min-width:680px}
+    thead th{position:sticky;top:0;background:#f9fafb;color:#111827;text-align:left;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);padding:10px 12px}
+    tbody td{border-bottom:1px solid var(--border);padding:12px;vertical-align:top}
+    tbody tr:hover{background:#f9fafb}
+
+    .thumb img{display:block;height:200px;width:auto;cursor:pointer}
+    .title{font-weight:700}
+    .muted{color:var(--muted);font-size:13px}
+
+    .btn-link{display:inline-flex;align-items:center;gap:8px;background:#eef2ff;border:1px solid #c7d2fe;color:#1e3a8a;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn-link:hover{background:#e0e7ff}
+
+    .footer{color:var(--muted);font-size:13px;margin-top:16px}
+
+    /* Overlay */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:100}
+    .overlay img{max-width:90%;max-height:90%;box-shadow:0 0 20px rgba(0,0,0,.5);border-radius:8px}
+    .overlay .close{position:absolute;top:16px;right:16px;background:#fff;border-radius:999px;border:1px solid var(--border);padding:6px 10px;font-weight:700;cursor:pointer}
+
+    /* small screens */
+    @media (max-width:720px){
+      .thumb img{height:120px}
+      .wrap{padding:16px}
+      thead{display:none}
+      table{min-width:0;width:100%}
+      tbody tr{display:block;border:1px solid var(--border);border-radius:12px;padding:12px;margin:12px 0;background:#fff}
+      tbody td{display:block;border-bottom:0;padding:6px 0}
+    }
+  </style>
+</head>
+<body>
+  <div class="age-gate" id="ageGate" aria-modal="true" role="dialog">
+    <div class="gate-card" role="document">
+      <h2>年齢確認｜R-18要素のある外部リンクを含みます</h2>
+      <p>18歳未満の方はご退出ください。18歳以上の方のみ、下の「続けて見る」を押して進んでください。</p>
+      <div class="gate-actions">
+        <button class="btn warn" onclick="history.back()">退出する</button>
+        <button class="btn primary" onclick="document.getElementById('ageGate').remove()">続けて見る</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="dot" aria-hidden="true"></div>
+      <h1>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</h1>
+    </header>
+
+    <p style="margin:8px 0 16px 0;"><a class="btn-link" href="https://auctions.yahoo.co.jp/seller/DPouKbofTdHg16XePNS1XBL2MtPry?user_type=c" target="_blank" rel="noopener">出品リスト</a></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:140px">サムネ</th>
+            <th>タイトル / 説明</th>
+          </tr>
+        </thead>
+        <tbody id="rows"><!-- injected --></tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>■ フォロー&ウォッチのおすすめ：ヤフオクの出品者ページで［フォロー］→新着通知。ウォッチ登録で終了前にリマインド通知が届きます。</p>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay">
+    <button class="close" onclick="document.getElementById('overlay').style.display='none'">× 閉じる</button>
+    <img id="overlayImg" src="" alt="拡大プレビュー" />
+  </div>
+
+<script>
+// グローバル関数（onclickから呼ぶ）
+function showOverlay(src){
+  var overlay = document.getElementById('overlay');
+  var overlayImg = document.getElementById('overlayImg');
+  overlayImg.src = src;
+  overlay.style.display = 'flex';
+}
+// Escキーで閉じる
+window.addEventListener('keydown', function(e){ if(e.key==='Escape'){ document.getElementById('overlay').style.display='none'; } });
+// 背景クリックで閉じる
+window.addEventListener('click', function(e){ var o=document.getElementById('overlay'); if(e.target===o){ o.style.display='none'; }});
+
+(function(){
+  var rowsEl = document.getElementById('rows');
+  if(!rowsEl) return;
+
+  var params = new URLSearchParams(location.search);
+  var debug = params.get('debug') === '1';
+  var log = function(){ if(debug) console.log.apply(console, ['[LP]'].concat([].slice.call(arguments))); };
+  var imgBase = params.get('imgBase') || 'thumbs/';
+  var utmRaw = params.get('utm');
+  var utm = utmRaw ? (utmRaw.indexOf('?')===0 ? utmRaw : '?' + utmRaw) : '';
+  var src = params.get('src') || 'auctions.json';
+
+  function sanitize(s){
+    s = (s==null?'':String(s));
+    var out='';
+    for(var i=0;i<s.length;i++){
+      var c=s.charCodeAt(i);
+      if(c>=32 && c!==60 && c!==62 && c!==34 && c!==39 && c!==96) out+=s[i];
+    }
+    return out;
+  }
+
+  function joinURL(base, path){
+    if(!path) return '';
+    if(/^https?:\/\//i.test(path)) return path;
+    if(!base) return path;
+    return base.replace(/\/+$/,'') + '/' + path.replace(/^\/+/, '');
+  }
+  function linkOf(id){ return 'https://auctions.yahoo.co.jp/jp/auction/' + sanitize(id) + utm; }
+
+  function render(items){
+    if(!Array.isArray(items) || items.length===0){
+      rowsEl.innerHTML = '<tr><td colspan="2" class="muted">表示できる項目がありません。デフォルトでは <code>auctions.json</code> を読み込み、画像は <code>thumbs/</code> を参照します。URLで上書きする場合は <code>?src=…</code> と <code>?imgBase=…</code> を指定してください。</td></tr>';
+      return;
+    }
+    items.sort(function(a,b){
+      var da = a.end? new Date(a.end) : null;
+      var db = b.end? new Date(b.end) : null;
+      if(da && db) return da - db;
+      if(da && !db) return -1;
+      if(!da && db) return 1;
+      return 0;
+    });
+    rowsEl.innerHTML = items.map(function(it){
+      var id = sanitize(it.id);
+      var title = sanitize(it.title);
+      var note = sanitize(it.note||'');
+      var img = joinURL(imgBase, sanitize(it.img));
+      var end = sanitize(it.end||'');
+      var imgTag = img ? '<img src="'+img+'" alt="'+(title||'プレビュー')+'" onclick="showOverlay(\''+img+'\')" />' : '';
+      var link = linkOf(id);
+      return '<tr>'+
+        '<td><div class="thumb">'+imgTag+'</div></td>'+
+        '<td>'+
+          '<div class="title">'+(title||id)+'</div>'+
+          (end ? '<div class="end-time muted">終了：'+end+'</div>' : '')+
+          '<div class="muted">'+note+'　<a href="'+link+'" target="_blank" rel="noopener">ヤフオクで見る</a></div>'+
+        '</td>'+
+      '</tr>';
+    }).join(''); // ← 空文字で結合（改行を入れない）
+  }
+
+  function parseInline(){
+    var items = [];
+    var list = params.getAll('i');
+    for(var i=0;i<list.length;i++){
+      var raw = list[i];
+      var parts = raw.split('|');
+      if(!parts[0]) continue;
+      items.push({ id: parts[0], title: parts[1]||'', img: parts[2]||'', end: parts[3]||'' });
+    }
+    return items;
+  }
+
+  if(src){
+    log('fetch src:', src);
+    fetch(src, {cache:'no-cache'})
+      .then(function(r){ return r.json(); })
+      .then(function(arr){ log('json ok len:', Array.isArray(arr)?arr.length:'NA'); render(Array.isArray(arr)?arr:[]); })
+      .catch(function(e){ log('json error:', e); render(parseInline()); });
+  } else {
+    render(parseInline());
+  }
+})();
+</script>
+</body>
+</html>
