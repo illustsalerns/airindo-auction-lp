@@ -1,81 +1,76 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</title>
-  <style>
-    :root{
-      --bg:#ffffff; --panel:#ffffff; --ink:#111827; --muted:#6b7280; --accent:#2563eb; --warn:#f59e0b;
-      --border:#e5e7eb; --table:#ffffff; --safe:#18a999;
-    }
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Arial,sans-serif;line-height:1.6}
-    .wrap{max-width:1100px;margin:0 auto;padding:24px}
-    header{display:flex;gap:16px;align-items:center;margin-bottom:16px}
-    header .dot{width:12px;height:12px;border-radius:50%;background:var(--accent)}
-    header h1{font-size:20px;margin:0}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --ink:#111827; --muted:#6b7280; --accent:#2563eb; --warn:#f59e0b;
+    --border:#e5e7eb; --table:#ffffff;
+  }
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Arial,sans-serif;line-height:1.6}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px}
+  header{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+  header .dot{width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  header h1{font-size:20px;margin:0}
 
-    /* callout + button */
-    .seller-callout{display:grid;gap:8px;justify-items:center;margin:18px 0 22px}
-    .seller-callout p{margin:0;font-weight:700}
-    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;
-      border:0;border-radius:12px;padding:12px 18px;text-decoration:none;font-weight:800;box-shadow:0 6px 18px rgba(37,99,235,.18)}
-    .cta-btn:hover{filter:brightness(1.05)}
-    .cta-btn svg{width:18px;height:18px}
+  .seller-callout{display:grid;gap:8px;justify-items:center;margin:18px 0 22px}
+  .seller-callout p{margin:0;font-weight:700}
+  .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 18px;text-decoration:none;font-weight:800;box-shadow:0 6px 18px rgba(37,99,235,.18)}
+  .cta-btn:hover{filter:brightness(1.05)}
+  .cta-btn svg{width:18px;height:18px}
 
-    .table-wrap{background:var(--table);border:1px solid var(--border);border-radius:16px;overflow:auto}
-    table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px}
-    thead th{position:sticky;top:0;background:#f9fafb;color:#111827;text-align:left;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);padding:10px 12px}
-    tbody td{border-bottom:1px solid var(--border);padding:12px;vertical-align:top}
-    tbody tr:hover{background:#f9fafb}
+  .table-wrap{background:var(--table);border:1px solid var(--border);border-radius:16px;overflow:auto}
+  table{border-collapse:separate;border-spacing:0;width:100%;min-width:720px}
+  thead th{position:sticky;top:0;background:#f9fafb;color:#111827;text-align:left;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);padding:10px 12px}
+  tbody td{border-bottom:1px solid var(--border);padding:12px;vertical-align:top}
+  tbody tr:hover{background:#f9fafb}
 
-    .thumb{width:140px;height:200px;border:1px dashed #cbd5e1;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:#f3f4f6}
-    .thumb img{display:block;height:200px;width:auto;object-fit:contain;cursor:zoom-in}
+  .thumb{width:140px;height:200px;border:1px dashed #cbd5e1;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:#f3f4f6}
+  .thumb img{display:block;height:200px;width:auto;object-fit:contain;cursor:zoom-in}
 
-    .title{font-weight:700}
-    .muted{color:var(--muted);font-size:13px}
+  .title{font-weight:700}
+  .muted{color:var(--muted);font-size:13px}
+  .btn-link{display:inline-flex;align-items:center;gap:8px;background:#eef2ff;border:1px solid #c7d2fe;color:#1e3a8a;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700}
+  .btn-link:hover{background:#e0e7ff}
 
-    .btn-link{display:inline-flex;align-items:center;gap:8px;background:#eef2ff;border:1px solid #c7d2fe;color:#1e3a8a;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700}
-    .btn-link:hover{background:#e0e7ff}
+  /* overlay viewer */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:60}
+  .overlay.open{display:flex}
+  .overlay-inner{max-width:min(96vw,1100px);max-height:92vh}
+  .overlay-inner img{max-width:100%;max-height:92vh;display:block}
+  .overlay-close{position:absolute;top:14px;right:14px;background:#fff;border:0;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
 
-    .footer{color:var(--muted);font-size:13px;margin-top:16px}
+  /* age gate */
+  .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:80}
+  .gate-card{width:min(680px,92vw);background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+  .gate-card h2{margin:0 0 8px 0;font-size:22px}
+  .gate-card p{color:var(--muted);margin:0 0 18px 0}
+  .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{appearance:none;border:1px solid var(--border);background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
+  .btn.primary{background:#22c55e;border-color:transparent;color:#062925;font-weight:700}
+  .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
 
-    /* overlay viewer */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:60}
-    .overlay.open{display:flex}
-    .overlay-inner{max-width:min(96vw,1100px);max-height:92vh}
-    .overlay-inner img{max-width:100%;max-height:92vh;display:block}
-    .overlay-close{position:absolute;top:14px;right:14px;background:#fff;border:0;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
-
-    /* age gate */
-    .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:80}
-    .gate-card{width:min(680px,92vw);background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    .gate-card h2{margin:0 0 8px 0;font-size:22px}
-    .gate-card p{color:var(--muted);margin:0 0 18px 0}
-    .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{appearance:none;border:1px solid var(--border);background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
-    .btn.primary{background:#22c55e;border-color:transparent;color:#062925;font-weight:700}
-    .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
-
-    /* small screens: 表をカード型にして横スクロールをなくす */
-    @media (max-width:720px){
-      .wrap{padding:16px}
-      .table-wrap{border:0}
-      table{min-width:0;border-spacing:0}
-      thead{display:none}
-      tbody tr{display:block;border:1px solid var(--border);border-radius:12px;margin:12px 0;padding:12px}
-      tbody td{display:block;border:0;padding:6px 0}
-      .thumb{width:100%;height:auto}
-      .thumb img{width:100%;height:auto;max-height:60vh}
-      .row-title{font-size:16px;font-weight:800;margin:6px 0}
-      .row-end{font-size:13px;color:var(--muted);margin:2px 0 8px}
-      .row-link{margin-top:10px}
-    }
-  </style>
+  /* small screens: カード型 */
+  @media (max-width:720px){
+    .wrap{padding:16px}
+    .table-wrap{border:0}
+    table{min-width:0;border-spacing:0}
+    thead{display:none}
+    tbody tr{display:block;border:1px solid var(--border);border-radius:12px;margin:12px 0;padding:12px}
+    tbody td{display:block;border:0;padding:6px 0}
+    .thumb{width:100%;height:auto}
+    .thumb img{width:100%;height:auto;max-height:60vh}
+    .row-title{font-size:16px;font-weight:800;margin:6px 0}
+    .row-end{font-size:13px;color:var(--muted);margin:2px 0 8px}
+    .row-link{margin-top:10px}
+  }
+</style>
 </head>
 <body>
-  <!-- 年齢確認（アプリ内ブラウザ想定：退出＝その場で閉じる挙動） -->
+  <!-- 年齢確認 -->
   <div class="age-gate" id="ageGate" aria-modal="true" role="dialog">
     <div class="gate-card" role="document">
       <h2>年齢確認｜R-18要素のある外部リンクを含みます</h2>
@@ -94,7 +89,7 @@
       <h1>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</h1>
     </header>
 
-    <!-- 出品リスト 強調表示 -->
+    <!-- 出品リスト 強調 -->
     <div class="seller-callout">
       <p>📝 <strong>全ての出品リストはこちらから</strong></p>
       <a class="cta-btn" target="_blank" rel="noopener"
@@ -110,13 +105,9 @@
           <tr>
             <th style="width:160px">商品画像</th>
             <th>商品タイトル</th>
-            <th style="width:180px">終了予定</th>
-            <th style="width:160px">リンク</th>
           </tr>
         </thead>
-        <tbody id="rows">
-          <!-- rows will be injected by JS -->
-        </tbody>
+        <tbody id="rows"></tbody>
       </table>
     </div>
 
@@ -125,41 +116,27 @@
     </div>
   </div>
 
-  <!-- overlay viewer -->
+  <!-- 画像拡大 -->
   <div class="overlay" id="viewer" aria-modal="true" role="dialog">
     <button class="overlay-close" onclick="hideOverlay()">閉じる ✕</button>
     <div class="overlay-inner"><img id="viewerImg" alt="拡大表示" /></div>
   </div>
 
 <script>
-/* ===== 年齢ゲート：アプリ内ブラウザ配慮（戻れない場合は非表示で代替） ===== */
 function closeCurrentOrHide(){
-  try {
-    // Xアプリ等でhistory.back()が効かない場合に備えて二段構え
-    if (window.history.length > 1) { history.back(); return; }
-  } catch(e){}
+  try { if (history.length > 1) { history.back(); return; } } catch(e){}
   document.getElementById('ageGate')?.remove();
 }
-
-/* ===== 画像オーバーレイ ===== */
 function showOverlay(src){
   const v = document.getElementById('viewer');
   const img = document.getElementById('viewerImg');
-  img.src = src;
-  v.classList.add('open');
+  img.src = src; v.classList.add('open');
 }
 function hideOverlay(){
   document.getElementById('viewer').classList.remove('open');
   document.getElementById('viewerImg').src = '';
 }
 
-/* ===== データ読込 & レンダリング =====
-   使い方：
-   - 通常は docs/auctions.json を読み込み
-   - URLパラメータで ?src=JSON_URL を指定可能
-   - ?i=ID|タイトル|画像|終了日時 を複数指定も可
-   - ?imgBase=thumbs/ のように画像ベースパス指定可
-*/
 (function(){
   const rowsEl = document.getElementById('rows');
   if(!rowsEl) return;
@@ -168,11 +145,15 @@ function hideOverlay(){
   const debug = params.get('debug') === '1';
   const log = (...a)=>{ if(debug) console.log('[LP]', ...a); };
 
-  const imgBase = params.get('imgBase') || '';
-  const utmRaw = params.get('utm');                // そのまま末尾に付ける簡易UTM
+  // 既定で thumbs/ を見る（末尾スラッシュ付与）
+  const imgBaseParam = params.get('imgBase');
+  const imgBase = (imgBaseParam && imgBaseParam.trim()!=='')
+    ? imgBaseParam.replace(/\/?$/,'/')
+    : 'thumbs/';
+
+  const utmRaw = params.get('utm');
   const utm = utmRaw ? (utmRaw.startsWith('?')? utmRaw : '?' + utmRaw) : '';
 
-  // 安全な文字化け耐性の軽量サニタイズ
   const sanitize = (s)=>{
     s = (s ?? '').toString();
     let out = '';
@@ -186,19 +167,16 @@ function hideOverlay(){
   const joinURL = (base, path)=> {
     if(!path) return '';
     if(/^https?:\/\//i.test(path)) return path;
-    if(!base) return path;
-    return base.replace(/\/+$/,'') + '/' + path.replace(/^\/+/, '');
+    return base.replace(/\/+$/,'/') + path.replace(/^\/+/, '');
   };
-
   const linkOf = (id)=> `https://auctions.yahoo.co.jp/jp/auction/${sanitize(id)}${utm}`;
 
   const render = (items)=>{
     if(!Array.isArray(items) || items.length===0){
-      rowsEl.innerHTML = '<tr><td colspan="4" class="muted">データが見つかりません。?i=… または auctions.json をご用意ください。</td></tr>';
+      rowsEl.innerHTML = '<tr><td colspan="2" class="muted">データが見つかりません。?i=… または auctions.json をご用意ください。</td></tr>';
       return;
     }
 
-    // 並び替え（endが取れるものは昇順）
     items.sort((a,b)=>{
       const da = a.end? new Date(a.end) : null;
       const db = b.end? new Date(b.end) : null;
@@ -208,19 +186,18 @@ function hideOverlay(){
       return 0;
     });
 
-    // PC:テーブル / モバイル:カード
     rowsEl.innerHTML = items.map((it)=>{
       const id = sanitize(it.id);
       const title = sanitize(it.title);
       const note = sanitize(it.note||'');
-      const img = joinURL(imgBase || '', sanitize(it.img));
+      const img = joinURL(imgBase, sanitize(it.img));
       const end = sanitize(it.end||'');
 
       const imgTag = img ? `<img src="${img}" alt="${title||'プレビュー'}" onclick="showOverlay('${img}')" />` : '';
       const linkTag = `<a class="btn-link" href="${linkOf(id)}" target="_blank" rel="noopener">ヤフオクで見る →</a>`;
 
       return (
-        `<tr class="row">`+
+        `<tr>`+
           `<td><div class="thumb">${imgTag}</div></td>`+
           `<td>`+
             `<div class="row-title title">${title||id}</div>`+
@@ -228,8 +205,6 @@ function hideOverlay(){
             `<div class="row-end">終了予定：${end||'-'}</div>`+
             `<div class="row-link">${linkTag}</div>`+
           `</td>`+
-          `<td class="hide-sm"><span class="muted">${end}</span></td>`+
-          `<td class="hide-sm">${linkTag}</td>`+
         `</tr>`
       );
     }).join('');
@@ -239,8 +214,7 @@ function hideOverlay(){
     const items = [];
     const list = params.getAll('i');
     for(const raw of list){
-      // id|title|img|end(optional)
-      const parts = raw.split('|');
+      const parts = raw.split('|'); // id|title|img|end(optional)
       if(!parts[0]) continue;
       items.push({ id: parts[0], title: parts[1]||'', img: parts[2]||'', end: parts[3]||'' });
     }
@@ -249,20 +223,12 @@ function hideOverlay(){
 
   const src = params.get('src');
   const defaultSrc = 'auctions.json';
-
-  const tryFetch = (url)=> fetch(url, {cache:'no-cache'}).then(r=>{
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    return r.json();
-  });
+  const fetchJson = (url)=> fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
 
   if(src){
-    log('fetch src:', src);
-    tryFetch(src).then(arr=> render(Array.isArray(arr)?arr:[]) )
-      .catch(()=> render(parseInline()));
+    fetchJson(src).then(arr=>render(Array.isArray(arr)?arr:[])).catch(()=>render(parseInline()));
   }else{
-    // デフォルトで同階層の auctions.json を読む
-    tryFetch(defaultSrc).then(arr=> render(Array.isArray(arr)?arr:[]) )
-      .catch(()=> render(parseInline()));
+    fetchJson(defaultSrc).then(arr=>render(Array.isArray(arr)?arr:[])).catch(()=>render(parseInline()));
   }
 })();
 </script>
