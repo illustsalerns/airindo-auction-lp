@@ -31,11 +31,13 @@
     header .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
     header h1{font-size:20px;margin:0;font-weight:700}
 
+    /* 出品リストボタン */
     .link-box{text-align:center;margin:20px 0}
     .link-box p{margin-bottom:8px;font-size:15px;font-weight:600}
     .link-btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:800;box-shadow:0 6px 18px rgba(37,99,235,.18)}
     .link-btn:hover{filter:brightness(1.05)}
 
+    /* テーブル */
     .table-wrap{background:var(--table);border:1px solid var(--border);border-radius:12px;overflow:auto}
     table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px}
     thead th{position:sticky;top:0;background:#f9fafb;color:#111827;text-align:left;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);padding:10px 12px;white-space:nowrap}
@@ -55,7 +57,19 @@
     .overlay img{max-width:95%;max-height:95%;border:4px solid #fff;border-radius:8px}
     .overlay.show{display:flex}
 
-    /* スマホ表示はカード型 */
+    /* 年齢確認（オーバーレイ） */
+    .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);
+      display:flex;align-items:center;justify-content:center;z-index:120}
+    .gate-card{width:min(680px,92vw);background:#fff;border:1px solid #e5e7eb;border-radius:16px;
+      padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .gate-card h2{margin:0 0 8px 0;font-size:22px}
+    .gate-card p{color:#6b7280;margin:0 0 18px 0}
+    .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn.primary{background:#22c55e;border-color:transparent;color:#062925;font-weight:700}
+    .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
+
+    /* スマホ表示はカード型（横スクロール回避） */
     @media (max-width:720px){
       .wrap{padding:16px}
       table{min-width:100%}
@@ -67,13 +81,26 @@
   </style>
 </head>
 <body>
+  <!-- 年齢確認オーバーレイ -->
+  <div class="age-gate" id="ageGate" aria-modal="true" role="dialog">
+    <div class="gate-card" role="document">
+      <h2>年齢確認｜R-18要素のある外部リンクを含みます</h2>
+      <p>18歳未満の方はご退出ください。18歳以上の方のみ、下の「続けて見る」を押して進んでください。</p>
+      <div class="gate-actions">
+        <button class="btn warn" onclick="closeCurrentOrHide()">退出する</button>
+        <button class="btn primary" onclick="document.getElementById('ageGate').remove()">続けて見る</button>
+      </div>
+      <p class="muted" style="margin-top:14px">※ このページは安全プレビューのみを掲載し、詳細は各ヤフオク出品ページをご確認ください。</p>
+    </div>
+  </div>
+
   <div class="wrap">
     <header>
       <div class="dot" aria-hidden="true"></div>
       <h1>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</h1>
     </header>
 
-    <!-- 出品リスト（イベント計測対応済み） -->
+    <!-- 出品リスト（イベント計測対応） -->
     <div class="link-box">
       <p>📋 <strong>全ての出品リストはこちらから</strong></p>
       <a class="link-btn"
@@ -103,6 +130,18 @@
   </div>
 
 <script>
+/* 年齢ゲート：アプリ内ブラウザ等で戻るが効かない場合は非表示で代替 */
+function closeCurrentOrHide(){
+  try { if (history.length > 1) { history.back(); return; } } catch(e){}
+  document.getElementById('ageGate')?.remove();
+}
+// デバッグでスキップ：?noage=1
+(function(){
+  const ps = new URLSearchParams(location.search);
+  if(ps.get('noage') === '1'){ document.getElementById('ageGate')?.remove(); }
+})();
+
+/* LP本体：JSONから一覧を生成（imgBase/utm/srcで上書き可） */
 (function(){
   const rowsEl = document.getElementById('rows');
   if(!rowsEl) return;
@@ -141,7 +180,7 @@
       rowsEl.innerHTML = '<tr><td colspan="2" class="muted">現在、出品中の商品はありません。</td></tr>';
       return;
     }
-    // 終了日時があるものは昇順
+    // endがあれば昇順
     items.sort((a,b)=>{
       const da = a.end? new Date(a.end) : null;
       const db = b.end? new Date(b.end) : null;
@@ -157,8 +196,8 @@
       const img = joinURL(imgBase, sanitize(it.img));
       const end = sanitize(it.end||'');
       const link = linkOf(id);
-
       const imgTag = img ? `<img src="${img}" alt="${title}" class="thumb" onclick="showOverlay('${img}')">` : '';
+
       return `
         <tr>
           <td>${imgTag}</td>
@@ -172,10 +211,23 @@
     }).join('');
   };
 
-  fetch(src, {cache:'no-cache'})
-    .then(r=>r.json())
-    .then(arr=>render(Array.isArray(arr)?arr:[]))
-    .catch(e=>{ console.error(e); render([]); });
+  const parseInline = ()=>{
+    const list = params.getAll('i'); // ?i=ID|タイトル|画像|終了
+    if(!list.length) return [];
+    return list.map(raw=>{
+      const p = raw.split('|');
+      return {id:p[0]||'', title:p[1]||'', img:p[2]||'', end:p[3]||''};
+    });
+  };
+
+  const tryFetch = (url)=> fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
+
+  const srcParam = params.get('src');
+  if(srcParam){
+    tryFetch(srcParam).then(arr=>render(Array.isArray(arr)?arr:[])).catch(()=>render(parseInline()));
+  }else{
+    tryFetch(src).then(arr=>render(Array.isArray(arr)?arr:[])).catch(()=>render(parseInline()));
+  }
 })();
 </script>
 </body>
