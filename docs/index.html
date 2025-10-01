@@ -6,7 +6,7 @@
   <title>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</title>
   <style>
     :root{
-      --bg:#ffffff; --panel:#ffffff; --ink:#111827; --muted:#6b7280; --accent:#17c3b2; --warn:#f59e0b;
+      --bg:#ffffff; --panel:#ffffff; --ink:#111827; --muted:#6b7280; --accent:#2563eb; --warn:#f59e0b;
       --border:#e5e7eb; --table:#ffffff; --safe:#18a999;
     }
     html,body{height:100%}
@@ -15,22 +15,24 @@
     header{display:flex;gap:16px;align-items:center;margin-bottom:16px}
     header .dot{width:12px;height:12px;border-radius:50%;background:var(--accent)}
     header h1{font-size:20px;margin:0}
-    .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:50}
-    .gate-card{width:min(680px,92vw);background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    .gate-card h2{margin:0 0 8px 0;font-size:22px}
-    .gate-card p{color:var(--muted);margin:0 0 18px 0}
-    .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{appearance:none;border:1px solid var(--border);background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
-    .btn.primary{background:var(--accent);border-color:transparent;color:#062925;font-weight:700}
-    .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
+
+    /* callout + button */
+    .seller-callout{display:grid;gap:8px;justify-items:center;margin:18px 0 22px}
+    .seller-callout p{margin:0;font-weight:700}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;
+      border:0;border-radius:12px;padding:12px 18px;text-decoration:none;font-weight:800;box-shadow:0 6px 18px rgba(37,99,235,.18)}
+    .cta-btn:hover{filter:brightness(1.05)}
+    .cta-btn svg{width:18px;height:18px}
 
     .table-wrap{background:var(--table);border:1px solid var(--border);border-radius:16px;overflow:auto}
-    table{border-collapse:separate;border-spacing:0;width:100%;min-width:680px}
+    table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px}
     thead th{position:sticky;top:0;background:#f9fafb;color:#111827;text-align:left;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);padding:10px 12px}
     tbody td{border-bottom:1px solid var(--border);padding:12px;vertical-align:top}
     tbody tr:hover{background:#f9fafb}
 
-    .thumb img{display:block;height:200px;width:auto;cursor:pointer}
+    .thumb{width:140px;height:200px;border:1px dashed #cbd5e1;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:#f3f4f6}
+    .thumb img{display:block;height:200px;width:auto;object-fit:contain;cursor:zoom-in}
+
     .title{font-weight:700}
     .muted{color:var(--muted);font-size:13px}
 
@@ -39,31 +41,50 @@
 
     .footer{color:var(--muted);font-size:13px;margin-top:16px}
 
-    /* Overlay */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:100}
-    .overlay img{max-width:90%;max-height:90%;box-shadow:0 0 20px rgba(0,0,0,.5);border-radius:8px}
-    .overlay .close{position:absolute;top:16px;right:16px;background:#fff;border-radius:999px;border:1px solid var(--border);padding:6px 10px;font-weight:700;cursor:pointer}
+    /* overlay viewer */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:60}
+    .overlay.open{display:flex}
+    .overlay-inner{max-width:min(96vw,1100px);max-height:92vh}
+    .overlay-inner img{max-width:100%;max-height:92vh;display:block}
+    .overlay-close{position:absolute;top:14px;right:14px;background:#fff;border:0;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
 
-    /* small screens */
+    /* age gate */
+    .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:80}
+    .gate-card{width:min(680px,92vw);background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .gate-card h2{margin:0 0 8px 0;font-size:22px}
+    .gate-card p{color:var(--muted);margin:0 0 18px 0}
+    .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{appearance:none;border:1px solid var(--border);background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn.primary{background:#22c55e;border-color:transparent;color:#062925;font-weight:700}
+    .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
+
+    /* small screens: 表をカード型にして横スクロールをなくす */
     @media (max-width:720px){
-      .thumb img{height:120px}
       .wrap{padding:16px}
+      .table-wrap{border:0}
+      table{min-width:0;border-spacing:0}
       thead{display:none}
-      table{min-width:0;width:100%}
-      tbody tr{display:block;border:1px solid var(--border);border-radius:12px;padding:12px;margin:12px 0;background:#fff}
-      tbody td{display:block;border-bottom:0;padding:6px 0}
+      tbody tr{display:block;border:1px solid var(--border);border-radius:12px;margin:12px 0;padding:12px}
+      tbody td{display:block;border:0;padding:6px 0}
+      .thumb{width:100%;height:auto}
+      .thumb img{width:100%;height:auto;max-height:60vh}
+      .row-title{font-size:16px;font-weight:800;margin:6px 0}
+      .row-end{font-size:13px;color:var(--muted);margin:2px 0 8px}
+      .row-link{margin-top:10px}
     }
   </style>
 </head>
 <body>
+  <!-- 年齢確認（アプリ内ブラウザ想定：退出＝その場で閉じる挙動） -->
   <div class="age-gate" id="ageGate" aria-modal="true" role="dialog">
     <div class="gate-card" role="document">
       <h2>年齢確認｜R-18要素のある外部リンクを含みます</h2>
       <p>18歳未満の方はご退出ください。18歳以上の方のみ、下の「続けて見る」を押して進んでください。</p>
       <div class="gate-actions">
-        <button class="btn warn" onclick="history.back()">退出する</button>
+        <button class="btn warn" onclick="closeCurrentOrHide()">退出する</button>
         <button class="btn primary" onclick="document.getElementById('ageGate').remove()">続けて見る</button>
       </div>
+      <p class="muted" style="margin-top:14px">※ このページは安全プレビューのみを掲載し、詳細は各ヤフオク出品ページをご確認ください。</p>
     </div>
   </div>
 
@@ -73,17 +94,29 @@
       <h1>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</h1>
     </header>
 
-    <p style="margin:8px 0 16px 0;"><a class="btn-link" href="https://auctions.yahoo.co.jp/seller/DPouKbofTdHg16XePNS1XBL2MtPry?user_type=c" target="_blank" rel="noopener">出品リスト</a></p>
+    <!-- 出品リスト 強調表示 -->
+    <div class="seller-callout">
+      <p>📝 <strong>全ての出品リストはこちらから</strong></p>
+      <a class="cta-btn" target="_blank" rel="noopener"
+         href="https://auctions.yahoo.co.jp/seller/DPouKbofTdHg16XePNS1XBL2MtPry?user_type=c" aria-label="ヤフオクの出品者ページを開く">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 5l7 7-7 7M5 12h14"/></svg>
+        出品リストを見る
+      </a>
+    </div>
 
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th style="width:140px">サムネ</th>
-            <th>タイトル / 説明</th>
+            <th style="width:160px">商品画像</th>
+            <th>商品タイトル</th>
+            <th style="width:180px">終了予定</th>
+            <th style="width:160px">リンク</th>
           </tr>
         </thead>
-        <tbody id="rows"><!-- injected --></tbody>
+        <tbody id="rows">
+          <!-- rows will be injected by JS -->
+        </tbody>
       </table>
     </div>
 
@@ -92,107 +125,144 @@
     </div>
   </div>
 
-  <!-- Overlay -->
-  <div class="overlay" id="overlay">
-    <button class="close" onclick="document.getElementById('overlay').style.display='none'">× 閉じる</button>
-    <img id="overlayImg" src="" alt="拡大プレビュー" />
+  <!-- overlay viewer -->
+  <div class="overlay" id="viewer" aria-modal="true" role="dialog">
+    <button class="overlay-close" onclick="hideOverlay()">閉じる ✕</button>
+    <div class="overlay-inner"><img id="viewerImg" alt="拡大表示" /></div>
   </div>
 
 <script>
-// グローバル関数（onclickから呼ぶ）
-function showOverlay(src){
-  var overlay = document.getElementById('overlay');
-  var overlayImg = document.getElementById('overlayImg');
-  overlayImg.src = src;
-  overlay.style.display = 'flex';
+/* ===== 年齢ゲート：アプリ内ブラウザ配慮（戻れない場合は非表示で代替） ===== */
+function closeCurrentOrHide(){
+  try {
+    // Xアプリ等でhistory.back()が効かない場合に備えて二段構え
+    if (window.history.length > 1) { history.back(); return; }
+  } catch(e){}
+  document.getElementById('ageGate')?.remove();
 }
-// Escキーで閉じる
-window.addEventListener('keydown', function(e){ if(e.key==='Escape'){ document.getElementById('overlay').style.display='none'; } });
-// 背景クリックで閉じる
-window.addEventListener('click', function(e){ var o=document.getElementById('overlay'); if(e.target===o){ o.style.display='none'; }});
 
+/* ===== 画像オーバーレイ ===== */
+function showOverlay(src){
+  const v = document.getElementById('viewer');
+  const img = document.getElementById('viewerImg');
+  img.src = src;
+  v.classList.add('open');
+}
+function hideOverlay(){
+  document.getElementById('viewer').classList.remove('open');
+  document.getElementById('viewerImg').src = '';
+}
+
+/* ===== データ読込 & レンダリング =====
+   使い方：
+   - 通常は docs/auctions.json を読み込み
+   - URLパラメータで ?src=JSON_URL を指定可能
+   - ?i=ID|タイトル|画像|終了日時 を複数指定も可
+   - ?imgBase=thumbs/ のように画像ベースパス指定可
+*/
 (function(){
-  var rowsEl = document.getElementById('rows');
+  const rowsEl = document.getElementById('rows');
   if(!rowsEl) return;
 
-  var params = new URLSearchParams(location.search);
-  var debug = params.get('debug') === '1';
-  var log = function(){ if(debug) console.log.apply(console, ['[LP]'].concat([].slice.call(arguments))); };
-  var imgBase = params.get('imgBase') || 'thumbs/';
-  var utmRaw = params.get('utm');
-  var utm = utmRaw ? (utmRaw.indexOf('?')===0 ? utmRaw : '?' + utmRaw) : '';
-  var src = params.get('src') || 'auctions.json';
+  const params = new URLSearchParams(location.search);
+  const debug = params.get('debug') === '1';
+  const log = (...a)=>{ if(debug) console.log('[LP]', ...a); };
 
-  function sanitize(s){
-    s = (s==null?'':String(s));
-    var out='';
-    for(var i=0;i<s.length;i++){
-      var c=s.charCodeAt(i);
-      if(c>=32 && c!==60 && c!==62 && c!==34 && c!==39 && c!==96) out+=s[i];
+  const imgBase = params.get('imgBase') || '';
+  const utmRaw = params.get('utm');                // そのまま末尾に付ける簡易UTM
+  const utm = utmRaw ? (utmRaw.startsWith('?')? utmRaw : '?' + utmRaw) : '';
+
+  // 安全な文字化け耐性の軽量サニタイズ
+  const sanitize = (s)=>{
+    s = (s ?? '').toString();
+    let out = '';
+    for (let i=0;i<s.length;i++){
+      const c = s.charCodeAt(i);
+      if (c >= 32 && c !== 60 && c !== 62 && c !== 34 && c !== 39 && c !== 96) out += s[i];
     }
     return out;
-  }
+  };
 
-  function joinURL(base, path){
+  const joinURL = (base, path)=> {
     if(!path) return '';
     if(/^https?:\/\//i.test(path)) return path;
     if(!base) return path;
     return base.replace(/\/+$/,'') + '/' + path.replace(/^\/+/, '');
-  }
-  function linkOf(id){ return 'https://auctions.yahoo.co.jp/jp/auction/' + sanitize(id) + utm; }
+  };
 
-  function render(items){
+  const linkOf = (id)=> `https://auctions.yahoo.co.jp/jp/auction/${sanitize(id)}${utm}`;
+
+  const render = (items)=>{
     if(!Array.isArray(items) || items.length===0){
-      rowsEl.innerHTML = '<tr><td colspan="2" class="muted">表示できる項目がありません。デフォルトでは <code>auctions.json</code> を読み込み、画像は <code>thumbs/</code> を参照します。URLで上書きする場合は <code>?src=…</code> と <code>?imgBase=…</code> を指定してください。</td></tr>';
+      rowsEl.innerHTML = '<tr><td colspan="4" class="muted">データが見つかりません。?i=… または auctions.json をご用意ください。</td></tr>';
       return;
     }
-    items.sort(function(a,b){
-      var da = a.end? new Date(a.end) : null;
-      var db = b.end? new Date(b.end) : null;
+
+    // 並び替え（endが取れるものは昇順）
+    items.sort((a,b)=>{
+      const da = a.end? new Date(a.end) : null;
+      const db = b.end? new Date(b.end) : null;
       if(da && db) return da - db;
       if(da && !db) return -1;
       if(!da && db) return 1;
       return 0;
     });
-    rowsEl.innerHTML = items.map(function(it){
-      var id = sanitize(it.id);
-      var title = sanitize(it.title);
-      var note = sanitize(it.note||'');
-      var img = joinURL(imgBase, sanitize(it.img));
-      var end = sanitize(it.end||'');
-      var imgTag = img ? '<img src="'+img+'" alt="'+(title||'プレビュー')+'" onclick="showOverlay(\''+img+'\')" />' : '';
-      var link = linkOf(id);
-      return '<tr>'+
-        '<td><div class="thumb">'+imgTag+'</div></td>'+
-        '<td>'+
-          '<div class="title">'+(title||id)+'</div>'+
-          (end ? '<div class="end-time muted">終了：'+end+'</div>' : '')+
-          '<div class="muted">'+note+'　<a href="'+link+'" target="_blank" rel="noopener">ヤフオクで見る</a></div>'+
-        '</td>'+
-      '</tr>';
-    }).join(''); // ← 空文字で結合（改行を入れない）
-  }
 
-  function parseInline(){
-    var items = [];
-    var list = params.getAll('i');
-    for(var i=0;i<list.length;i++){
-      var raw = list[i];
-      var parts = raw.split('|');
+    // PC:テーブル / モバイル:カード
+    rowsEl.innerHTML = items.map((it)=>{
+      const id = sanitize(it.id);
+      const title = sanitize(it.title);
+      const note = sanitize(it.note||'');
+      const img = joinURL(imgBase || '', sanitize(it.img));
+      const end = sanitize(it.end||'');
+
+      const imgTag = img ? `<img src="${img}" alt="${title||'プレビュー'}" onclick="showOverlay('${img}')" />` : '';
+      const linkTag = `<a class="btn-link" href="${linkOf(id)}" target="_blank" rel="noopener">ヤフオクで見る →</a>`;
+
+      return (
+        `<tr class="row">`+
+          `<td><div class="thumb">${imgTag}</div></td>`+
+          `<td>`+
+            `<div class="row-title title">${title||id}</div>`+
+            (note? `<div class="muted">${note}</div>` : '')+
+            `<div class="row-end">終了予定：${end||'-'}</div>`+
+            `<div class="row-link">${linkTag}</div>`+
+          `</td>`+
+          `<td class="hide-sm"><span class="muted">${end}</span></td>`+
+          `<td class="hide-sm">${linkTag}</td>`+
+        `</tr>`
+      );
+    }).join('');
+  };
+
+  const parseInline = ()=>{
+    const items = [];
+    const list = params.getAll('i');
+    for(const raw of list){
+      // id|title|img|end(optional)
+      const parts = raw.split('|');
       if(!parts[0]) continue;
       items.push({ id: parts[0], title: parts[1]||'', img: parts[2]||'', end: parts[3]||'' });
     }
     return items;
-  }
+  };
+
+  const src = params.get('src');
+  const defaultSrc = 'auctions.json';
+
+  const tryFetch = (url)=> fetch(url, {cache:'no-cache'}).then(r=>{
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  });
 
   if(src){
     log('fetch src:', src);
-    fetch(src, {cache:'no-cache'})
-      .then(function(r){ return r.json(); })
-      .then(function(arr){ log('json ok len:', Array.isArray(arr)?arr.length:'NA'); render(Array.isArray(arr)?arr:[]); })
-      .catch(function(e){ log('json error:', e); render(parseInline()); });
-  } else {
-    render(parseInline());
+    tryFetch(src).then(arr=> render(Array.isArray(arr)?arr:[]) )
+      .catch(()=> render(parseInline()));
+  }else{
+    // デフォルトで同階層の auctions.json を読む
+    tryFetch(defaultSrc).then(arr=> render(Array.isArray(arr)?arr:[]) )
+      .catch(()=> render(parseInline()));
   }
 })();
 </script>
