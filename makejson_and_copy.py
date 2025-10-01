@@ -11,7 +11,7 @@ ROOT_DIR = Path(r"D:\事業用\オリジナル\アダルトコンテンツ\オ�
 SUB_THUMB_DIR_NAME = "サムネ"
 IMG_EXTS = (".jpg", ".jpeg", ".png")
 
-SITE_DIR = Path("site")
+SITE_DIR = Path("docs")
 SITE_TMP = Path("_site_build_tmp")
 SITE_OLD_PREFIX = "_site_old_"
 OUTPUT_JSON_NAME = "auctions.json"
