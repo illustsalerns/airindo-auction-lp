@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6DGZNSPKDE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6DGZNSPKDE');
+
+    // 汎用クリック計測
+    function trackClick(eventName, params){
+      if (typeof gtag === 'function') gtag('event', eventName, params || {});
+    }
+  </script>
+
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#ffffff; --ink:#111827; --muted:#6b7280; --accent:#2563eb;
+      --border:#e5e7eb; --table:#ffffff;
+    }
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Arial,sans-serif;line-height:1.6}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+    header .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    header h1{font-size:20px;margin:0;font-weight:700}
+
+    /* 出品リストボタン */
+    .link-box{text-align:center;margin:20px 0}
+    .link-box p{margin-bottom:8px;font-size:15px;font-weight:600}
+    .link-btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:800;box-shadow:0 6px 18px rgba(37,99,235,.18)}
+    .link-btn:hover{filter:brightness(1.05)}
+
+    /* テーブル */
+    .table-wrap{background:var(--table);border:1px solid var(--border);border-radius:12px;overflow:auto}
+    table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px}
+    thead th{position:sticky;top:0;background:#f9fafb;color:#111827;text-align:left;font-weight:700;font-size:13px;border-bottom:1px solid var(--border);padding:10px 12px;white-space:nowrap}
+    tbody td{border-bottom:1px solid var(--border);padding:12px;vertical-align:top}
+    tbody tr:hover{background:#f9fafb}
+
+    .thumb{max-height:200px;width:auto;border:1px dashed #cbd5e1;border-radius:8px;display:block;overflow:hidden;background:#f3f4f6;cursor:pointer}
+    .thumb img{display:block;max-height:200px;width:auto;height:auto}
+
+    .title{font-weight:700;margin-bottom:6px}
+    .muted{color:var(--muted);font-size:13px}
+    .btn-link{display:inline-block;background:#eef2ff;border:1px solid #c7d2fe;color:#1e3a8a;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:6px}
+    .btn-link:hover{background:#e0e7ff}
+
+    /* 画像プレビュー用オーバーレイ */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:100}
+    .overlay img{max-width:95%;max-height:95%;border:4px solid #fff;border-radius:8px}
+    .overlay.show{display:flex}
+
+    /* 年齢確認（オーバーレイ） */
+    .age-gate{position:fixed;inset:0;background:rgba(6,7,10,.82);backdrop-filter:blur(4px);
+      display:flex;align-items:center;justify-content:center;z-index:120}
+    .gate-card{width:min(680px,92vw);background:#fff;border:1px solid #e5e7eb;border-radius:16px;
+      padding:24px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .gate-card h2{margin:0 0 8px 0;font-size:22px}
+    .gate-card p{color:#6b7280;margin:0 0 18px 0}
+    .gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#111827;padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn.primary{background:#22c55e;border-color:transparent;color:#062925;font-weight:700}
+    .btn.warn{background:#fff7ed;border-color:#fcd34d;color:#92400e}
+
+    /* スマホ表示はカード型（横スクロール回避） */
+    @media (max-width:720px){
+      .wrap{padding:16px}
+      table{min-width:100%}
+      thead{display:none}
+      tbody tr{display:block;border-bottom:1px solid var(--border);margin-bottom:12px;padding-bottom:12px}
+      tbody td{display:block;border:none;padding:4px 0}
+      .thumb{margin-bottom:8px}
+    }
+  </style>
+</head>
+<body>
+  <!-- 年齢確認オーバーレイ -->
+  <div class="age-gate" id="ageGate" aria-modal="true" role="dialog">
+    <div class="gate-card" role="document">
+      <h2>年齢確認｜R-18要素のある外部リンクを含みます</h2>
+      <p>18歳未満の方はご退出ください。18歳以上の方のみ、下の「続けて見る」を押して進んでください。</p>
+      <div class="gate-actions">
+        <button class="btn warn" onclick="closeCurrentOrHide()">退出する</button>
+        <button class="btn primary" onclick="document.getElementById('ageGate').remove()">続けて見る</button>
+      </div>
+      <p class="muted" style="margin-top:14px">※ このページは安全プレビューのみを掲載し、詳細は各ヤフオク出品ページをご確認ください。</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="dot" aria-hidden="true"></div>
+      <h1>あいりん堂 ヤフオク開催中リスト（新商品・ピックアップ）</h1>
+    </header>
+
+    <!-- 出品リスト（イベント計測対応） -->
+    <div class="link-box">
+      <p>📋 <strong>全ての出品リストはこちらから</strong></p>
+      <a class="link-btn"
+         href="https://auctions.yahoo.co.jp/seller/DPouKbofTdHg16XePNS1XBL2MtPry?user_type=c"
+         target="_blank" rel="noopener"
+         onclick="trackClick('seller_list_click', {location:'top_button'})">
+        出品リストを見る
+      </a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:160px">商品画像</th>
+            <th>商品タイトル</th>
+          </tr>
+        </thead>
+        <tbody id="rows"><!-- JSで挿入 --></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 画像プレビュー -->
+  <div class="overlay" id="overlay" onclick="this.classList.remove('show')">
+    <img src="" alt="preview">
+  </div>
+
+<script>
+/* 年齢ゲート：アプリ内ブラウザ等で戻るが効かない場合は非表示で代替 */
+function closeCurrentOrHide(){
+  try { if (history.length > 1) { history.back(); return; } } catch(e){}
+  document.getElementById('ageGate')?.remove();
+}
+// デバッグでスキップ：?noage=1
+(function(){
+  const ps = new URLSearchParams(location.search);
+  if(ps.get('noage') === '1'){ document.getElementById('ageGate')?.remove(); }
+})();
+
+/* LP本体：JSONから一覧を生成（imgBase/utm/srcで上書き可） */
+(function(){
+  const rowsEl = document.getElementById('rows');
+  if(!rowsEl) return;
+
+  const params = new URLSearchParams(location.search);
+  const imgBase = (params.get('imgBase') || 'thumbs/').replace(/\/?$/, '/'); // 既定 thumbs/
+  const src = params.get('src') || 'auctions.json';
+  const utmRaw = params.get('utm');
+  const utm = utmRaw ? (utmRaw.startsWith('?')? utmRaw : '?' + utmRaw) : '';
+
+  const sanitize = (s)=>{
+    s = (s ?? '').toString();
+    let out = '';
+    for (let i=0;i<s.length;i++){
+      const c = s.charCodeAt(i);
+      if (c>=32 && c!==60 && c!==62 && c!==34 && c!==39 && c!==96) out += s[i];
+    }
+    return out;
+  };
+
+  const joinURL = (base, path)=>{
+    if(!path) return '';
+    if(/^https?:\/\//i.test(path)) return path;
+    return base.replace(/\/+$/,'/') + path.replace(/^\/+/, '');
+  };
+  const linkOf = (id)=> `https://auctions.yahoo.co.jp/jp/auction/${sanitize(id)}${utm}`;
+
+  const showOverlay = (src)=>{
+    const o = document.getElementById('overlay');
+    o.querySelector('img').src = src;
+    o.classList.add('show');
+  };
+
+  const render = (items)=>{
+    if(!Array.isArray(items) || items.length===0){
+      rowsEl.innerHTML = '<tr><td colspan="2" class="muted">現在、出品中の商品はありません。</td></tr>';
+      return;
+    }
+    // endがあれば昇順
+    items.sort((a,b)=>{
+      const da = a.end? new Date(a.end) : null;
+      const db = b.end? new Date(b.end) : null;
+      if(da && db) return da - db;
+      if(da && !db) return -1;
+      if(!da && db) return 1;
+      return 0;
+    });
+
+    rowsEl.innerHTML = items.map(it=>{
+      const id = sanitize(it.id);
+      const title = sanitize(it.title);
+      const img = joinURL(imgBase, sanitize(it.img));
+      const end = sanitize(it.end||'');
+      const link = linkOf(id);
+      const imgTag = img ? `<img src="${img}" alt="${title}" class="thumb" onclick="showOverlay('${img}')">` : '';
+
+      return `
+        <tr>
+          <td>${imgTag}</td>
+          <td>
+            <div class="title">${title || id}</div>
+            ${end ? `<div class="muted">終了予定：${end}</div>` : ''}
+            <a class="btn-link" href="${link}" target="_blank" rel="noopener"
+               onclick="trackClick('yahoo_link', {id:'${id}'})">ヤフオクで見る →</a>
+          </td>
+        </tr>`;
+    }).join('');
+  };
+
+  const parseInline = ()=>{
+    const list = params.getAll('i'); // ?i=ID|タイトル|画像|終了
+    if(!list.length) return [];
+    return list.map(raw=>{
+      const p = raw.split('|');
+      return {id:p[0]||'', title:p[1]||'', img:p[2]||'', end:p[3]||''};
+    });
+  };
+
+  const tryFetch = (url)=> fetch(url,{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); });
+
+  const srcParam = params.get('src');
+  if(srcParam){
+    tryFetch(srcParam).then(arr=>render(Array.isArray(arr)?arr:[])).catch(()=>render(parseInline()));
+  }else{
+    tryFetch(src).then(arr=>render(Array.isArray(arr)?arr:[])).catch(()=>render(parseInline()));
+  }
+})();
+</script>
+</body>
+</html>
